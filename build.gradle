@@ -1,0 +1,65 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven { url 'https://kotlin.bintray.com/ktor' }
+        maven { url 'https://kotlin.bintray.com/kotlinx' }
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+apply plugin: 'org.jetbrains.kotlin.multiplatform'
+group 'com.rarnu.mirror'
+version '0.0.1'
+repositories {
+    mavenCentral()
+    jcenter()
+    maven { url 'https://kotlin.bintray.com/ktor' }
+    maven { url 'https://kotlin.bintray.com/kotlinx' }
+    maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+    maven { url "https://plugins.gradle.org/m2/" }
+    maven { url 'http://119.3.22.119:8081/repository/maven-releases' }
+}
+kotlin {
+    macosX64("macos") {
+        binaries {
+            executable {
+                entryPoint 'main'
+                linkerOpts "-L/usr/lib -liconv"
+            }
+        }
+    }
+    /*
+    linuxX64("linux") {
+        binaries {
+            executable { entryPoint 'main' }
+        }
+    }
+     */
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation kotlin('stdlib-common')
+                implementation 'io.ktor:ktor-client-core:1.2.0'
+                implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.2.1'
+                implementation 'com.rarnu:kn-common-pc:0.2.0'
+            }
+        }
+        macosMain {
+            dependencies {
+                implementation 'io.ktor:ktor-client-curl:1.2.1'
+                implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core-native:1.2.1'
+            }
+        }
+        /*
+        linuxMain {
+            dependencies {
+                implementation 'io.ktor:ktor-client-curl:1.2.1'
+            }
+        }
+         */
+    }
+}
